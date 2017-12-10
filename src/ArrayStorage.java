@@ -24,15 +24,17 @@ public class ArrayStorage {
         for (int i = 0; i < size -1; i++)
             if (storage[i].uuid.equals(uuid)) {
             r = storage[i];
-            }
+            }else r = null;
         return r;
     }
 
     void delete(String uuid) {
         for (int i = 0; i < size; i++)
             if (storage[i].uuid.equals(uuid)) {
-                storage[i] = storage[size];
+                storage[i] = null;
+                storage[i] = storage[size - 1];
                 size--;
+                return;
             }
         }
     /**
