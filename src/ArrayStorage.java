@@ -13,40 +13,26 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        if (r.uuid != null) {
-            for (int i = 0; i < size; i++) {
-                if (r.uuid.equals(storage[i].uuid)) {
-                    storage[i] = r;
-                    System.out.println("Успешно обновлено");
-                    return;
-                }
-            }
-            System.out.println("Ошибка:нет совпадений");
+        for (int i = 0; i < size; i++) {
+            if (r.uuid.equals(storage[i].uuid)) {
+                storage[i] = r;
+                System.out.println("Успешно обновлено");
+            } else System.out.println("Ошибка:нет совпадений");
         }
     }
 
     void save(Resume r) {
-        if (r.uuid != null) {
-            for (int i = 0; i < size; i++) {
-                if (storage[i].uuid.equals(r.uuid)) {
-                    System.out.println("Ошибка:такая запись уже сушествует");
-                    return;
-                }
-            }
-            if (size + 1 <= storage.length) {
-                storage[size] = r;
-                size++;
-            }
+        if (iterator(r.uuid).equals(r)) {
+            System.out.println("Ошибка:такая запись уже сушествует");
+        } else if (size + 1 <= storage.length) {
+            storage[size] = r;
+            size++;
         }
     }
 
+
     Resume get(String uuid) {
-        Resume temp = new Resume();
-        for (int i = 0; i < size; i++)
-            if (storage[i].uuid.equals(uuid)) {
-                temp = storage[i];
-            }
-        return temp;
+        return iterator(uuid);
     }
 
     void delete(String uuid) {
@@ -70,5 +56,15 @@ public class ArrayStorage {
 
     int size() {
         return size;
+    }
+
+    private Resume iterator(String uuid) {
+        Resume temporary = new Resume();
+        for (int i = 0; i < size; i++) {
+            if (uuid != null && storage[i].uuid.equals(uuid)) {
+                temporary = storage[i];
+            }
+        }
+        return temporary;
     }
 }
