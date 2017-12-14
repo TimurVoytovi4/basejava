@@ -12,11 +12,11 @@ public class ArrayStorage {
         size = 0;
     }
 
-    void update(Resume r, Resume q) {
+    public void update(Resume r) {
         if (r.uuid != null) {
-            for (int i = 0; i < size--; i++) {
+            for (int i = 0; i < size; i++) {
                 if (r.uuid.equals(storage[i].uuid)) {
-                    storage[i] = q;
+                    storage[i] = r;
                     System.out.println("Успешно обновлено");
                     return;
                 }
@@ -27,29 +27,30 @@ public class ArrayStorage {
 
     void save(Resume r) {
         if (r.uuid != null) {
-            for (int i = 0; i < size--; i++) {
-                if (r.uuid.equals(storage[i].uuid)) {
+            for (int i = 0; i < size; i++) {
+                if (storage[i].uuid.equals(r.uuid)) {
                     System.out.println("Ошибка:такая запись уже сушествует");
                     return;
                 }
             }
-            if (size++ <= storage.length)
+            if (size + 1 <= storage.length) {
                 storage[size] = r;
-            size++;
+                size++;
+            }
         }
     }
 
     Resume get(String uuid) {
-        Resume r = new Resume();
-        for (int i = 0; i < size--; i++)
+        Resume temp = new Resume();
+        for (int i = 0; i < size; i++)
             if (storage[i].uuid.equals(uuid)) {
-                r = storage[i];
-            } else r = null;
-        return r;
+                temp = storage[i];
+            }
+        return temp;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size--; i++)
+        for (int i = 0; i < size; i++)
             if (storage[i].uuid.equals(uuid)) {
                 storage[i] = storage[size - 1];
                 storage[size - 1] = null;
