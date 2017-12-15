@@ -13,36 +13,41 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        for (int i = 0; i < size; i++) {
-            if (r.uuid.equals(storage[i].uuid)) {
-                storage[i] = r;
-                System.out.println("Успешно обновлено");
-            } else System.out.println("Ошибка:нет совпадений");
-        }
+        int i = iterator(r.uuid);
+        if (i != -1) {
+            storage[i] = r;
+            System.out.println("Успешно обновлено");
+        } else System.out.println("Ошибка:нет совпадений");
     }
 
     void save(Resume r) {
-        if (iterator(r.uuid).equals(r)) {
-            System.out.println("Ошибка:такая запись уже сушествует");
-        } else if (size + 1 <= storage.length) {
-            storage[size] = r;
-            size++;
+        if (r != null) {
+            if (iterator(r.uuid) != -1) {
+                System.out.println("Ошибка:такая запись уже сушествует");
+            } else if (size + 1 <= storage.length) {
+                storage[size] = r;
+                size++;
+            }
         }
     }
 
 
     Resume get(String uuid) {
-        return iterator(uuid);
+        int i = iterator(uuid);
+        if (i != -1) {
+            return storage[i];
+        }
+        return null;
+
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size; i++)
-            if (storage[i].uuid.equals(uuid)) {
-                storage[i] = storage[size - 1];
-                storage[size - 1] = null;
-                size--;
-                return;
-            }
+        int i = iterator(uuid);
+        if (i != -1) {
+            storage[i] = storage[size - 1];
+            storage[size - 1] = null;
+            size--;
+        }
     }
 
     /**
@@ -58,13 +63,13 @@ public class ArrayStorage {
         return size;
     }
 
-    private Resume iterator(String uuid) {
-        Resume temporary = new Resume();
+    private int iterator(String uuid) {
+        int index = -1;
         for (int i = 0; i < size; i++) {
             if (uuid != null && storage[i].uuid.equals(uuid)) {
-                temporary = storage[i];
+                index = i;
             }
         }
-        return temporary;
+        return index;
     }
 }
