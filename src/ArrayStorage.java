@@ -3,12 +3,12 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
+public class ArrayStorage implements Storage {
     private static final int STORAGE_LIMIT = 10000;
     private Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
-    void clear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
@@ -21,7 +21,7 @@ public class ArrayStorage {
         } else System.out.println("Ошибка:нет совпадений");
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         if (getIndex(r.uuid) != -1) {
             System.out.println("Ошибка:такая запись уже сушествует");
         } else if (size + 1 <= STORAGE_LIMIT) {
@@ -31,7 +31,7 @@ public class ArrayStorage {
     }
 
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         int i = getIndex(uuid);
         if (i != -1) {
             return storage[i];
@@ -40,7 +40,7 @@ public class ArrayStorage {
 
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int i = getIndex(uuid);
         if (i != -1) {
             storage[i] = storage[size - 1];
@@ -52,21 +52,20 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 
     private int getIndex(String uuid) {
-        int index = -1;
         for (int i = 0; i < size; i++) {
             if (uuid != null && storage[i].uuid.equals(uuid)) {
-                index = i;
+                return i;
             }
         }
-        return index;
+        return -1;
     }
 }
