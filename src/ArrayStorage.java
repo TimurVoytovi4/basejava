@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
@@ -7,13 +8,12 @@ public class ArrayStorage {
     private int size = 0;
 
     void clear() {
-        for (int i = 0; i < size; i++)
-            storage[i] = null;
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     public void update(Resume r) {
-        int i = iterator(r.uuid);
+        int i = getIndex(r.uuid);
         if (i != -1) {
             storage[i] = r;
             System.out.println("Успешно обновлено");
@@ -21,19 +21,17 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (r != null) {
-            if (iterator(r.uuid) != -1) {
-                System.out.println("Ошибка:такая запись уже сушествует");
-            } else if (size + 1 <= storage.length) {
-                storage[size] = r;
-                size++;
-            }
+        if (getIndex(r.uuid) != -1) {
+            System.out.println("Ошибка:такая запись уже сушествует");
+        } else if (size + 1 <= storage.length) {
+            storage[size] = r;
+            size++;
         }
     }
 
 
     Resume get(String uuid) {
-        int i = iterator(uuid);
+        int i = getIndex(uuid);
         if (i != -1) {
             return storage[i];
         }
@@ -42,7 +40,7 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int i = iterator(uuid);
+        int i = getIndex(uuid);
         if (i != -1) {
             storage[i] = storage[size - 1];
             storage[size - 1] = null;
@@ -54,16 +52,14 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] res = new Resume[size];
-        System.arraycopy(storage, 0, res, 0, size);
-        return res;
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     int size() {
         return size;
     }
 
-    private int iterator(String uuid) {
+    private int getIndex(String uuid) {
         int index = -1;
         for (int i = 0; i < size; i++) {
             if (uuid != null && storage[i].uuid.equals(uuid)) {
