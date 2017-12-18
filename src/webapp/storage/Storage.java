@@ -1,3 +1,7 @@
+package webapp.storage;
+
+import webapp.model.Resume;
+
 public interface Storage {
 
     void clear();
