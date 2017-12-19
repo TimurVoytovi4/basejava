@@ -7,7 +7,7 @@ public abstract class AbstractArrayStorage implements Storage{
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
-
+    static int index;
     public int size() {
         return size;
     }
@@ -18,6 +18,11 @@ public abstract class AbstractArrayStorage implements Storage{
             return storage[i];
         }
         return null;
+    }
+
+     boolean checkup(String uuid){
+        index = getIndex(uuid);
+        return index != -1;
     }
 
     protected abstract int getIndex(String uuid);

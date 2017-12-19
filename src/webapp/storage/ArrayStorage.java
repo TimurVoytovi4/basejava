@@ -16,32 +16,32 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index != -1) {
+        if (checkup(r.getUuid())) {
             storage[index] = r;
-        } else System.out.println("Resume" +r.getUuid() + " not exist");
+            index = 0;
+        } else System.out.println("Resume" + r.getUuid() + " not exist");
     }
 
     public void save(Resume r) {
-        if (getIndex(r.getUuid()) != -1) {
+        if (checkup(r.getUuid())) {
             System.out.println("Resume" + r.getUuid() + " already exist");
+            index = 0;
         } else if (size + 1 <= STORAGE_LIMIT) {
             storage[size] = r;
             size++;
-        }else {
+        } else {
             System.out.println("Storage overflow");
         }
     }
 
 
-
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index != -1) {
+        if (checkup(uuid)) {
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
             size--;
-        }else System.out.println("Resume" + uuid + " not exist");
+            index = 0;
+        } else System.out.println("Resume" + uuid + " not exist");
     }
 
     /**
