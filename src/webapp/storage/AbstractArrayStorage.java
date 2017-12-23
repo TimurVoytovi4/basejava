@@ -2,25 +2,43 @@ package webapp.storage;
 
 import webapp.model.Resume;
 
-public abstract class AbstractArrayStorage implements Storage{
-    protected static final int STORAGE_LIMIT = 100000;
+import java.util.Arrays;
+
+public abstract class AbstractArrayStorage implements Storage {
+    static final int STORAGE_LIMIT = 100000;
+    static int index;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    protected int size = 0;
-    static int index;
+    int size = 0;
+
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    public void update(Resume r) {
+        if (checkup(r.getUuid())) {
+            storage[index] = r;
+            index = 0;
+        } else System.out.println("Resume" + r.getUuid() + " not exist");
+    }
+
     public int size() {
         return size;
     }
 
     public Resume get(String uuid) {
-        int i = getIndex(uuid);
-        if (i != -1) {
-            return storage[i];
-        }
-        return null;
+        int temp = getIndex(uuid);
+        if (temp >= 0) {
+            return storage[temp];
+        } else return null;
     }
 
-     boolean checkup(String uuid){
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
+    }
+
+    boolean checkup(String uuid) {
         index = getIndex(uuid);
         return index != -1;
     }
