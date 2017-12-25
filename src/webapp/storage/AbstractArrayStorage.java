@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
     static final int STORAGE_LIMIT = 100000;
-    static int index;
+    int index;
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     int size = 0;
@@ -40,7 +40,19 @@ public abstract class AbstractArrayStorage implements Storage {
 
     boolean checkup(String uuid) {
         index = getIndex(uuid);
-        return index != -1;
+        return index >= 0;
+    }
+
+    void reduce() {
+        storage[size - 1] = null;
+        size--;
+        index = 0;
+    }
+
+    void increase(Resume r) {
+        storage[size] = r;
+        size++;
+        index = 0;
     }
 
     protected abstract int getIndex(String uuid);
