@@ -7,21 +7,12 @@ import webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume r) {
-        if (checkup(r.getUuid())) {
-            System.out.println("Resume" + r.getUuid() + " already exist");
-        } else if (size + 1 <= STORAGE_LIMIT) {
-            increase(r);
-        } else {
-            System.out.println("Storage overflow");
-        }
+    public void fillSavedElement(Resume r) {
+        storage[size] = r;
     }
 
-    public void delete(String uuid) {
-        if (checkup(uuid)) {
+    public void fillDeletedElement(int index) {
             storage[index] = storage[size - 1];
-            reduce();
-        } else System.out.println("Resume " + uuid + " not exist");
     }
 
     /**

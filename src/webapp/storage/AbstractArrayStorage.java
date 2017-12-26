@@ -5,10 +5,9 @@ import webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    static final int STORAGE_LIMIT = 100000;
-    int index;
-
+    private static final int STORAGE_LIMIT = 100000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
+    int index;
     int size = 0;
 
     public void clear() {
@@ -38,23 +37,38 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    boolean checkup(String uuid) {
+    private boolean checkup(String uuid) {
         index = getIndex(uuid);
         return index >= 0;
     }
 
-    void reduce() {
-        storage[size - 1] = null;
-        size--;
-        index = 0;
+    @Override
+    public void delete(String uuid) {
+        if (!checkup(uuid)) {
+            System.out.println("Resume " + uuid + " not exist");
+        } else {
+            fillDeletedElement(index);
+            storage[size - 1] = null;
+            size--;
+        }
     }
 
-    void increase(Resume r) {
-        storage[size] = r;
-        size++;
-        index = 0;
+    @Override
+    public void save(Resume r) {
+        if (checkup(r.getUuid())) {
+            System.out.println("Resume" + r.getUuid() + " already exist");
+        } else if (size + 1 <= STORAGE_LIMIT) {
+            fillSavedElement(r);
+            size++;
+            index = 0;
+        } else {
+            System.out.println("Storage overflow");
+        }
     }
 
     protected abstract int getIndex(String uuid);
 
+    protected abstract void fillDeletedElement(int index);
+
+    protected abstract void fillSavedElement(Resume r);
 }
