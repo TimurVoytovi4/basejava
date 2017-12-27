@@ -7,7 +7,7 @@ import webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void fillSavedElement(Resume r) {
+    public void insertElement(Resume r, int index) {
         storage[size] = r;
     }
 

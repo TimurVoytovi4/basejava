@@ -7,7 +7,6 @@ import java.util.Arrays;
 public abstract class AbstractArrayStorage implements Storage {
     private static final int STORAGE_LIMIT = 100000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    int index;
     int size = 0;
 
     public void clear() {
@@ -16,9 +15,9 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void update(Resume r) {
-        if (checkup(r.getUuid())) {
+        int index = getIndex(r.getUuid());
+        if (index > 0) {
             storage[index] = r;
-            index = 0;
         } else System.out.println("Resume" + r.getUuid() + " not exist");
     }
 
@@ -37,14 +36,10 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOfRange(storage, 0, size);
     }
 
-    private boolean checkup(String uuid) {
-        index = getIndex(uuid);
-        return index >= 0;
-    }
-
     @Override
     public void delete(String uuid) {
-        if (!checkup(uuid)) {
+        int index = getIndex(uuid);
+        if (index < 0) {
             System.out.println("Resume " + uuid + " not exist");
         } else {
             fillDeletedElement(index);
@@ -55,12 +50,12 @@ public abstract class AbstractArrayStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        if (checkup(r.getUuid())) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
             System.out.println("Resume" + r.getUuid() + " already exist");
         } else if (size + 1 <= STORAGE_LIMIT) {
-            fillSavedElement(r);
+            insertElement(r, index);
             size++;
-            index = 0;
         } else {
             System.out.println("Storage overflow");
         }
@@ -70,5 +65,5 @@ public abstract class AbstractArrayStorage implements Storage {
 
     protected abstract void fillDeletedElement(int index);
 
-    protected abstract void fillSavedElement(Resume r);
+    protected abstract void insertElement(Resume r, int index);
 }

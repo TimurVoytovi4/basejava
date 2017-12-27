@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void fillSavedElement(Resume r) {
+    public void insertElement(Resume r, int index) {
         if (-index > size) {
             storage[size] = r;
         } else {
