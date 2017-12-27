@@ -1,22 +1,27 @@
 package webapp.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * com.urise.webapp.webapp.model.webapp.model.Resume class
  */
 public class Resume implements Comparable<Resume> {
 
-    public String getUuid() {
-        return uuid;
+    // Unique identifier
+    private final String uuid;
+
+    public Resume() {
+        this(UUID.randomUUID().toString());
     }
 
-    public void setUuid(String uuid) {
+    public Resume(String uuid) {
         this.uuid = uuid;
     }
 
-    // Unique identifier
-    private String uuid;
+    public String getUuid() {
+        return uuid;
+    }
 
     @Override
     public String toString() {
