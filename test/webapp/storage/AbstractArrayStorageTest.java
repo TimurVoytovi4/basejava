@@ -21,7 +21,7 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_4 = "uuid4";
 
     @Before
-    public void setUp(){
+    public void setUp() {
         storage.clear();
         storage.save(new Resume(UUID_1));
         storage.save(new Resume(UUID_2));
@@ -40,33 +40,39 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void size(){
+    public void size() {
         Assert.assertEquals(3, storage.size());
     }
 
     @Test
     public void get() {
-        storage.get(UUID_1);
-
+        Assert.assertNotNull(storage.get(UUID_1));
     }
 
     @Test
     public void getAll() {
-        storage.getAll();
+        Assert.assertNotNull(storage.getAll());
     }
 
     @Test
     public void delete() {
         storage.delete(UUID_2);
+        Assert.assertEquals(2, storage.size());
     }
 
     @Test
     public void save() {
         storage.save(new Resume(UUID_4));
+        Assert.assertEquals(4, storage.size());
+    }
+
+    @Test
+    public void overflow() {
+        Assert.assertTrue(storage.size() < 100000);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void getNotExist(){
+    public void getNotExist() {
         storage.get("dummy");
     }
 }
