@@ -87,7 +87,7 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test(expected = StorageException.class)
-    public void saveOverFlow() throws NoSuchFieldException, IllegalAccessException {
+    public void saveOverflow() throws NoSuchFieldException, IllegalAccessException {
         Field field = AbstractArrayStorage.class.getDeclaredField("STORAGE_LIMIT");
         field.setAccessible(true);
         int value = (int) field.get(storage);
