@@ -3,8 +3,12 @@ package webapp.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import webapp.exception.ExistStorageException;
 import webapp.exception.NotExistStorageException;
+import webapp.exception.StorageException;
 import webapp.model.Resume;
+
+import java.lang.reflect.Field;
 
 public abstract class AbstractArrayStorageTest {
     private Storage storage;
@@ -19,6 +23,9 @@ public abstract class AbstractArrayStorageTest {
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
+
+    private static Resume r1 = new Resume(UUID_4);
+    private static Resume r2 = new Resume(UUID_2);
 
     @Before
     public void setUp() {
@@ -36,7 +43,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() {
-        storage.update(new Resume(UUID_2));
+        storage.update(r2);
+        Assert.assertEquals(r2, storage.get(UUID_2));
+
     }
 
     @Test
@@ -46,12 +55,23 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void get() {
-        Assert.assertNotNull(storage.get(UUID_1));
+        Assert.assertEquals(r2, storage.get(UUID_2));
     }
 
     @Test
     public void getAll() {
-        Assert.assertNotNull(storage.getAll());
+        for (Resume resume : storage.getAll()) {
+            switch (resume.getUuid()) {
+                case UUID_1:
+                    break;
+                case UUID_2:
+                    break;
+                case UUID_3:
+                    break;
+                default:
+                    throw new NotExistStorageException(resume.getUuid());
+            }
+        }
     }
 
     @Test
@@ -62,17 +82,28 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() {
-        storage.save(new Resume(UUID_4));
+        storage.save(r1);
         Assert.assertEquals(4, storage.size());
     }
 
-    @Test
-    public void overflow() {
-        Assert.assertTrue(storage.size() < 100000);
+    @Test(expected = StorageException.class)
+    public void saveOverFlow() throws NoSuchFieldException, IllegalAccessException {
+        Field field = AbstractArrayStorage.class.getDeclaredField("STORAGE_LIMIT");
+        field.setAccessible(true);
+        int value = (int) field.get(storage);
+        for (int i = 3; i < value; i++) {
+            storage.save(new Resume());
+        }
+        storage.save(r1);
     }
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExist() {
         storage.get("dummy");
+    }
+
+    @Test(expected = ExistStorageException.class)
+    public void getExist(){
+        storage.save(r2);
     }
 }
