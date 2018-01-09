@@ -8,7 +8,7 @@ import webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    private static final int STORAGE_LIMIT = 100000;
+    protected static final int STORAGE_LIMIT = 100000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     int size = 0;
 
@@ -19,7 +19,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
-        if (index > 0) {
+        if (index >= 0) {
             storage[index] = r;
         } else throw new NotExistStorageException(r.getUuid());
     }
