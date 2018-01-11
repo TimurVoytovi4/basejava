@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest {
-    private Storage storage;
+    Storage storage;
 
 
     AbstractArrayStorageTest(Storage storage) {
@@ -30,7 +30,7 @@ public abstract class AbstractArrayStorageTest {
 
 
     private static final String UUID_4 = "uuid4";
-    private static final Resume RESUME_4 = new Resume(UUID_4);
+    static final Resume RESUME_4 = new Resume(UUID_4);
 
 
     @Before
@@ -94,17 +94,7 @@ public abstract class AbstractArrayStorageTest {
         assertGet(RESUME_4);
     }
 
-    @Test(expected = StorageException.class)
-    public void saveOverflow() {
-        try {
-            for (int i = 3; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
-            }
-        } catch (StorageException e) {
-            fail();
-        }
-        storage.save(RESUME_4);
-    }
+
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExist() {
