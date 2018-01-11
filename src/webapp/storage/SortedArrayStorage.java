@@ -24,7 +24,7 @@ private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
+        Resume searchKey = new Resume(uuid,"test");
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 

@@ -3,7 +3,7 @@ package webapp.storage;
 import webapp.exception.StorageException;
 import webapp.model.Resume;
 
-import java.util.Arrays;
+import java.util.*;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
@@ -46,14 +46,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return storage[(Integer) index];
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> resumeList = Arrays.asList(storage);
+        SortResumeByName.sort(resumeList);
+        return SortResumeByName.sort(resumeList);
     }
 
     @Override
     protected boolean isExist(Object index) {
         return (Integer) index >= 0;
     }
+
 
     protected abstract void fillDeletedElement(int index);
 

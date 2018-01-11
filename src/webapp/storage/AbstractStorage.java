@@ -5,6 +5,10 @@ import webapp.exception.ExistStorageException;
 import webapp.exception.NotExistStorageException;
 import webapp.model.Resume;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     protected abstract void doDelete(Object searchKey);
@@ -57,6 +61,12 @@ public abstract class AbstractStorage implements Storage {
             throw new ExistStorageException(uuid);
         }
         return searchKey;
+    }
+    static class SortResumeByName{
+        public static List<Resume> sort(List<Resume> list){
+            list.sort(Comparator.comparing(Resume::getFullName));
+            return list;
+        }
     }
 
 }
