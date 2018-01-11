@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> storageMap = new HashMap<>();
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected void doDelete(Object searchKey) {
