@@ -1,39 +1,69 @@
 package webapp.storage;
 
+
+import webapp.exception.ExistStorageException;
+import webapp.exception.NotExistStorageException;
 import webapp.model.Resume;
 
-import java.util.List;
-
 public abstract class AbstractStorage implements Storage {
-    List<Resume> storage;
 
-    public void clear() {
-        storage.clear();
-    }
+    int size = 0;
 
     public int size() {
-        return storage.size();
+        return size;
     }
 
-    public void delete(String uuid) {
-        storage.remove(getIndex(uuid));
-    }
-
+    @Override
     public Resume get(String uuid) {
-        return storage.get(getIndex(uuid));
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        }
+        return foundItem(uuid);
     }
 
-    public void save(Resume resume) {
-        storage.add(resume);
+    @Override
+    public void update(Resume r) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
+            replace(index, r);
+        } else throw new NotExistStorageException(r.getUuid());
     }
 
-    public void update(Resume resume) {
-        storage.set(getIndex(resume.getUuid()), resume);
+    @Override
+    public void delete(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        } else {
+            fillDeletedElement(index);
+            nullRemovedElem(index);
+            size--;
+        }
     }
 
-    public Resume[] getAll() {
-        return (Resume[]) storage.toArray();
+    @Override
+    public void save(Resume r) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
+            throw new ExistStorageException(r.getUuid());
+        } else if (!isOverflow(r)) {
+            insertElement(r, index);
+            size++;
+        }
     }
+
+    protected abstract Resume foundItem(String uuid);
+
+    protected abstract boolean isOverflow(Resume r);
 
     protected abstract int getIndex(String uuid);
+
+    protected abstract void insertElement(Resume r, int index);
+
+    protected abstract void fillDeletedElement(int index);
+
+    protected abstract void nullRemovedElem(int index);
+
+    abstract void replace(int index, Resume r);
 }
