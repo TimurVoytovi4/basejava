@@ -2,7 +2,12 @@ package webapp.storage;
 
 import webapp.model.Resume;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MapStorage extends AbstractStorage {
+    protected Map<String, Resume> storageMap = new HashMap<>();
+
     @Override
     protected Resume foundItem(String uuid) {
         return null;
