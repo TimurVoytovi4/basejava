@@ -63,11 +63,17 @@ public class ListStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] array = storage.getAll();
-        assertEquals(3, array.length);
-        assertEquals(RESUME_1, array[0]);
-        assertEquals(RESUME_2, array[1]);
-        assertEquals(RESUME_3, array[2]);
+        for (Resume res:storage.getAll()){
+            switch (res.getUuid()){
+                case UUID_1:
+                    break;
+                case UUID_2:
+                    break;
+                case UUID_3:
+                    break;
+                    default:throw new NotExistStorageException(res.getUuid());
+            }
+        }
     }
 
     @Test(expected = NotExistStorageException.class)
