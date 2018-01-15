@@ -6,10 +6,11 @@ import java.util.UUID;
 /**
  * com.urise.webapp.webapp.model.webapp.model.Resume class
  */
-public class Resume implements Comparable<Resume> {
+public class Resume {
 
     // Unique identifier
     private final String uuid;
+    private String fullName;
 
     public Resume() {
         this(UUID.randomUUID().toString());
@@ -40,10 +41,5 @@ public class Resume implements Comparable<Resume> {
     public int hashCode() {
 
         return Objects.hash(uuid);
-    }
-
-    @Override
-    public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
     }
 }

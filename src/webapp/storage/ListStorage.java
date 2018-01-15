@@ -3,62 +3,61 @@ package webapp.storage;
 import webapp.model.Resume;
 
 
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> storage = new LinkedList<>();
 
+    private List<Resume> list = new ArrayList<>();
 
     @Override
-    protected Resume foundItem(String uuid) {
-        return storage.get(getIndex(uuid));
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
     }
 
     @Override
-    protected boolean isOverflow(Resume r) {
-        return false;
+    protected Resume doGet(Object searchKey) {
+        return list.get((Integer) searchKey);
     }
 
     @Override
-    protected int getIndex(String uuid) {
-//        Resume resume = new Resume(uuid);
-//        return storage.indexOf(resume);
-        Resume searchKey = new Resume(uuid);
-        Resume[] array = storage.toArray(new Resume[0]);
-        return Arrays.binarySearch(array, 0, size, searchKey);
+    public int size() {
+        return list.size();
     }
 
     @Override
-    protected void insertElement(Resume r, int index) {
-        int insertIdx = -index - 1;
-        storage.add(insertIdx, r);
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     @Override
-    protected void fillDeletedElement(int index) {
-        storage.remove(index);
+    protected void doSave(Resume r, Object searchKey) {
+        list.add(r);
     }
 
     @Override
-    protected void nullRemovedElem(int index) {
-
+    protected void doDelete(Object searchKey) {
+        list.remove(((Integer) searchKey).intValue());
     }
 
+
     @Override
-    void replace(int index, Resume r) {
-        storage.set(index, r);
+    protected void doUpdate(Resume r, Object searchKey) {
+        list.set((Integer) searchKey, r);
     }
 
     @Override
     public void clear() {
-        storage.clear();
-        size = 0;
+        list.clear();
     }
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[0]);
+        return list.toArray(new Resume[list.size()]);
     }
 }

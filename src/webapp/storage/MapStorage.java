@@ -9,37 +9,32 @@ public class MapStorage extends AbstractStorage {
     protected Map<String, Resume> storageMap = new HashMap<>();
 
     @Override
-    protected Resume foundItem(String uuid) {
-        return null;
+    protected void doDelete(Object searchKey) {
+
     }
 
     @Override
-    protected boolean isOverflow(Resume r) {
+    protected void doSave(Resume r, Object searchKey) {
+
+    }
+
+    @Override
+    protected boolean isExist(Object searchKey) {
         return false;
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        return 0;
+    protected Resume doGet(Object searchKey) {
+        return null;
     }
 
     @Override
-    protected void insertElement(Resume r, int index) {
-
+    protected Object getSearchKey(String uuid) {
+        return null;
     }
 
     @Override
-    protected void fillDeletedElement(int index) {
-
-    }
-
-    @Override
-    protected void nullRemovedElem(int index) {
-
-    }
-
-    @Override
-    void replace(int index, Resume r) {
+    protected void doUpdate(Resume r, Object searchKey) {
 
     }
 
@@ -51,5 +46,10 @@ public class MapStorage extends AbstractStorage {
     @Override
     public Resume[] getAll() {
         return new Resume[0];
+    }
+
+    @Override
+    public int size() {
+        return 0;
     }
 }
