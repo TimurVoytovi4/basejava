@@ -35,7 +35,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume(uuid);
+                    r = new Resume();
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
@@ -59,8 +59,8 @@ public class MainArray {
         }
     }
 
-    static void printAll() {
-        Resume[] all = ARRAY_STORAGE.getAll();
+    private static void printAll() {
+        Resume[] all = ARRAY_STORAGE.getAllSorted().toArray(new Resume[ARRAY_STORAGE.size]);
         System.out.println("----------------------------");
         if (all.length == 0) {
             System.out.println("Empty");

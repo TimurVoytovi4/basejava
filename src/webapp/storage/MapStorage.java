@@ -2,7 +2,10 @@ package webapp.storage;
 
 import webapp.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
     private Map<String, Resume> map = new HashMap<>();
@@ -14,7 +17,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        map.put(null, r);
+        map.put(r.getUuid(), r);
     }
 
     @Override
@@ -24,7 +27,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return map.get(String.valueOf(searchKey));
+        return (Resume) searchKey;
     }
 
     @Override
