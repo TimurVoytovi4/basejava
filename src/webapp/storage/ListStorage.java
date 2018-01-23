@@ -45,6 +45,10 @@ public class ListStorage extends AbstractStorage {
         list.remove(((Integer) searchKey).intValue());
     }
 
+    @Override
+    protected List<Resume> storage() {
+        return list;
+    }
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
@@ -56,8 +60,4 @@ public class ListStorage extends AbstractStorage {
         list.clear();
     }
 
-    @Override
-    public List<Resume> getAllSorted() {
-        return SortResumeByName.sort(list);
-    }
 }

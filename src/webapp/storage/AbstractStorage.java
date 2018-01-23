@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-
+    private static final Comparator<Resume> COMPARATOR_BY_NAME = Comparator.comparing(Resume::getUuid);
     protected abstract void doDelete(Object searchKey);
 
     protected abstract void doSave(Resume r, Object searchKey);
@@ -54,6 +54,15 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
+    @Override
+    public List<Resume> getAllSorted() {
+        List<Resume> resumeList = storage();
+        resumeList.sort(COMPARATOR_BY_NAME);
+        return resumeList;
+    }
+
+    protected abstract List<Resume> storage();
+
     private Object getNotExistedSearchKey(String uuid) {
         Object searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
@@ -61,11 +70,4 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
-    protected static class SortResumeByName{
-        public static List<Resume> sort(List<Resume> list){
-            list.sort(Comparator.comparing(Resume::getFullName));
-            return list;
-        }
-    }
-
 }

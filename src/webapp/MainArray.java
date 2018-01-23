@@ -35,7 +35,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume();
+                    r = new Resume("");
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
