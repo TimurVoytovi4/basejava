@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage {
     private Map<String, Resume> map = new HashMap<>();
 
     @Override
@@ -31,12 +31,8 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String fullName) {
-        for (Map.Entry entry : map.entrySet()){
-            Resume resume = (Resume) entry.getValue();
-            if (resume.getFullName().equals(fullName))return resume;
-        }
-        return null;
+    protected Object getSearchKey(String uuid) {
+        return map.get(uuid);
     }
 
     @Override
