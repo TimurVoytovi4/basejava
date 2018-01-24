@@ -13,7 +13,7 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected void doDelete(Object searchKey) {
         Resume resume = (Resume)searchKey;
-        map.remove(resume.getFullName());
+        map.remove(resume.getUuid());
     }
 
     @Override
