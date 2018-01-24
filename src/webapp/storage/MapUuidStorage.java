@@ -12,7 +12,8 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void doDelete(Object searchKey) {
-        map.remove(String.valueOf(searchKey));
+        Resume resume = (Resume)searchKey;
+        map.remove(resume.getUuid());
     }
 
     @Override
@@ -37,7 +38,8 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        map.replace(String.valueOf(searchKey), r);
+        Resume resume = (Resume)searchKey;
+        map.replace(resume.getUuid(), r);
     }
 
     @Override
