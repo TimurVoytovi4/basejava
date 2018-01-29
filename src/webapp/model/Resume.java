@@ -10,7 +10,7 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
-    private String fullName;
+    private final String fullName;
 
     public String getFullName() {
         return fullName;
@@ -22,6 +22,8 @@ public class Resume {
     }
 
     public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
     }
