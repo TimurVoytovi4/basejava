@@ -6,6 +6,7 @@ import webapp.storage.ArrayStorage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * Test for com.urise.webapp.webapp.list.webapp.list.ArrayStorage
@@ -65,9 +66,9 @@ public class MainArray {
     }
 
     private static void printAll() {
-        Resume[] all = ARRAY_STORAGE.getAllSorted().toArray(new Resume[ARRAY_STORAGE.size]);
+        List<Resume> all = ARRAY_STORAGE.getAllSorted();
         System.out.println("----------------------------");
-        if (all.length == 0) {
+        if (all.size() == 0) {
             System.out.println("Empty");
         } else {
             for (Resume r : all) {
