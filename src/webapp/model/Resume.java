@@ -11,6 +11,10 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
+    private Contacts contacts;
+    private TextFields textFields;
+    private TextItems textItems;
+    private DateTextItems dateTextItems;
 
     public String getFullName() {
         return fullName;
