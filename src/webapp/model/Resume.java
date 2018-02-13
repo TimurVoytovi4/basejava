@@ -16,7 +16,8 @@ public class Resume implements Comparable<Resume> {
     private TextField objective = new TextField(SectionType.OBJECTIVE.getTitle());
     private TextItem achievement = new TextItem(SectionType.ACHIEVEMENT.getTitle());
     private TextItem qualification = new TextItem(SectionType.QUALIFICATIONS.getTitle());
-    private DateTextItems dateTextItems;
+    private DateTextItems experience = new DateTextItems(SectionType.EXPERIENCE.getTitle());
+    private DateTextItems education = new DateTextItems(SectionType.EDUCATION.getTitle());
 
     public String getFullName() {
         return fullName;
