@@ -4,6 +4,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DateTextItems {
+
+    private String dateTextItemsTitle;
+
+    public String getDateTextItemsTitle() {
+        return dateTextItemsTitle;
+    }
+    public DateTextItems(String dateTextItemsTitle) {
+        this.dateTextItemsTitle = dateTextItemsTitle;
+    }
+
     private List<PlaceOfStay> list = new LinkedList<>();
 
     public void setList(PlaceOfStay obj) {
