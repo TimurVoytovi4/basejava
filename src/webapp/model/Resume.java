@@ -1,5 +1,7 @@
 package webapp.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,7 +13,7 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Contacts contacts = new Contacts();
+    private Map<String, String> contacts = new HashMap<>();
     private TextField personal = new TextField(SectionType.PERSONAL.getTitle());
     private TextField objective = new TextField(SectionType.OBJECTIVE.getTitle());
     private TextItem achievement = new TextItem(SectionType.ACHIEVEMENT.getTitle());

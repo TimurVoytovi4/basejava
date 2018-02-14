@@ -1,16 +1,16 @@
 package webapp.model;
 
-import java.util.HashMap;
-import java.util.Map;
+public enum Contacts {
+    ID("Тип"),
+    VALUE("Значение");
 
-public class Contacts {
-    private Map<String, String> contactTable = new HashMap<>();
+    private String title;
 
-    public void setContacts(String idContact, String valContact) {
-        contactTable.put(idContact, valContact);
+    Contacts(String title) {
+        this.title = title;
     }
 
-    public Map<String, String> getContactTable() {
-        return contactTable;
+    public String getTitle() {
+        return title;
     }
 }
