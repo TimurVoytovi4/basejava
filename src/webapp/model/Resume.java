@@ -13,6 +13,7 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
+
     private Map<Contacts, Contacts> contacts = new HashMap<>();
 
     private TextField personal = new TextField(SectionType.PERSONAL);
@@ -21,6 +22,14 @@ public class Resume implements Comparable<Resume> {
     private TextItem qualification = new TextItem(SectionType.QUALIFICATIONS);
     private DateTextItems experience = new DateTextItems(SectionType.EXPERIENCE);
     private DateTextItems education = new DateTextItems(SectionType.EDUCATION);
+
+    public void setContacts(Contacts id,Contacts value) {
+        contacts.put(id,value);
+    }
+
+    public Map<Contacts, Contacts> getContacts(){
+        return contacts;
+    }
 
     public String getFullName() {
         return fullName;
