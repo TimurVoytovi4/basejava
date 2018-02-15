@@ -13,13 +13,14 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<String, String> contacts = new HashMap<>();
-    private TextField personal = new TextField(SectionType.PERSONAL.getTitle());
-    private TextField objective = new TextField(SectionType.OBJECTIVE.getTitle());
-    private TextItem achievement = new TextItem(SectionType.ACHIEVEMENT.getTitle());
-    private TextItem qualification = new TextItem(SectionType.QUALIFICATIONS.getTitle());
-    private DateTextItems experience = new DateTextItems(SectionType.EXPERIENCE.getTitle());
-    private DateTextItems education = new DateTextItems(SectionType.EDUCATION.getTitle());
+    private Map<Contacts, Contacts> contacts = new HashMap<>();
+
+    private TextField personal = new TextField(SectionType.PERSONAL);
+    private TextField objective = new TextField(SectionType.OBJECTIVE);
+    private TextItem achievement = new TextItem(SectionType.ACHIEVEMENT);
+    private TextItem qualification = new TextItem(SectionType.QUALIFICATIONS);
+    private DateTextItems experience = new DateTextItems(SectionType.EXPERIENCE);
+    private DateTextItems education = new DateTextItems(SectionType.EDUCATION);
 
     public String getFullName() {
         return fullName;
