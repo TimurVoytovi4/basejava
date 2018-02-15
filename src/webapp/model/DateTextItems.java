@@ -25,14 +25,14 @@ public class DateTextItems {
         return list;
     }
 
-    class PlaceOfStay {
+    static class PlaceOfStay {
         String namePlace;
         LocalDate start;
         LocalDate end;
         String position;
         String description;
 
-        public PlaceOfStay(String namePlace, LocalDate start, LocalDate end, String position, String description) {
+        PlaceOfStay(String namePlace, LocalDate start, LocalDate end, String position, String description) {
             this.namePlace = namePlace;
             this.start = start;
             this.end = end;
