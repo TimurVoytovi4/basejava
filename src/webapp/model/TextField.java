@@ -1,10 +1,10 @@
 package webapp.model;
 
 public class TextField {
-    private String textTitle;
+    private SectionType textTitle;
     private String textContent;
 
-    TextField(String title) {
+    TextField(SectionType title) {
         this.textTitle = title;
     }
 
@@ -16,7 +16,7 @@ public class TextField {
         this.textContent = textContent;
     }
 
-    public String getTextTitle() {
+    public SectionType getTextTitle() {
         return textTitle;
     }
 

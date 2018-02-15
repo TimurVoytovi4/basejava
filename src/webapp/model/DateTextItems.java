@@ -1,16 +1,17 @@
 package webapp.model;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
 public class DateTextItems {
 
-    private String dateTextItemsTitle;
+    private SectionType dateTextItemsTitle;
 
-    public String getDateTextItemsTitle() {
+    public SectionType getDateTextItemsTitle() {
         return dateTextItemsTitle;
     }
-    public DateTextItems(String dateTextItemsTitle) {
+    DateTextItems(SectionType dateTextItemsTitle) {
         this.dateTextItemsTitle = dateTextItemsTitle;
     }
 
@@ -26,15 +27,18 @@ public class DateTextItems {
 
     class PlaceOfStay {
         String namePlace;
-        String date;
+        LocalDate start;
+        LocalDate end;
         String position;
         String description;
 
-        public PlaceOfStay(String namePlace, String date, String position, String description) {
+        public PlaceOfStay(String namePlace, LocalDate start, LocalDate end, String position, String description) {
             this.namePlace = namePlace;
-            this.date = date;
+            this.start = start;
+            this.end = end;
             this.position = position;
             this.description = description;
         }
+
     }
 }

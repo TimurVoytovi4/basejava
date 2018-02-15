@@ -4,15 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextItem {
-    private String textItemTitle;
+    private SectionType textItemTitle;
     private List<String> list = new ArrayList<>();
 
-    TextItem(String textItemTitle) {
+    TextItem(SectionType textItemTitle) {
 
         this.textItemTitle = textItemTitle;
     }
 
-    public String getTextItemTitle() {
+    public SectionType getTextItemTitle() {
         return textItemTitle;
     }
 
