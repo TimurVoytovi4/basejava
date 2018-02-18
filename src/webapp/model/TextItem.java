@@ -3,24 +3,20 @@ package webapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextItem {
-    private SectionType textItemTitle;
+public class TextItem extends Section {
+
     private List<String> list = new ArrayList<>();
 
-    TextItem(SectionType textItemTitle) {
-
-        this.textItemTitle = textItemTitle;
+    TextItem(SectionType title) {
+        super(title);
     }
 
-    public SectionType getTextItemTitle() {
-        return textItemTitle;
+
+    public void setContent(Object text){
+        list.add((String) text);
     }
 
-    public void setList(String item){
-        list.add(item);
-    }
-
-    public List<String> getList() {
-        return list;
+    public String getContent() {
+        return list.toString();
     }
 }

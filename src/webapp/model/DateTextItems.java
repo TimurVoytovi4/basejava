@@ -4,25 +4,20 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DateTextItems {
-
-    private SectionType dateTextItemsTitle;
-
-    public SectionType getDateTextItemsTitle() {
-        return dateTextItemsTitle;
-    }
-    DateTextItems(SectionType dateTextItemsTitle) {
-        this.dateTextItemsTitle = dateTextItemsTitle;
-    }
+public class DateTextItems extends Section {
 
     private List<PlaceOfStay> list = new LinkedList<>();
 
-    public void setList(PlaceOfStay obj) {
-        list.add(obj);
+    DateTextItems(SectionType title) {
+        super(title);
     }
 
-    public List<PlaceOfStay> getList() {
-        return list;
+    public void setContent(Object content) {
+        list.add((PlaceOfStay) content);
+    }
+
+    public String getContent() {
+        return list.toString();
     }
 
     static class PlaceOfStay {
@@ -32,7 +27,7 @@ public class DateTextItems {
         String position;
         String description;
 
-        PlaceOfStay(String namePlace, LocalDate start, LocalDate end, String position, String description) {
+        PlaceOfStay(String description, String namePlace, LocalDate start, LocalDate end, String position) {
             this.namePlace = namePlace;
             this.start = start;
             this.end = end;

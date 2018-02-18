@@ -1,8 +1,7 @@
 package webapp.model;
 
 public enum Contacts {
-    ID("Тип"),
-    VALUE("Значение");
+    ID("Тип");
 
     private String title;
 
