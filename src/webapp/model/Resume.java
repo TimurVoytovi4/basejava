@@ -15,72 +15,25 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
-    private Map<Contacts, Contacts> contacts = new HashMap<>();
+    private Map<Type, String> contacts = new HashMap<>();
 
-    private TextField personal = new TextField(SectionType.PERSONAL);
-    private TextField objective = new TextField(SectionType.OBJECTIVE);
-    private TextItem achievement = new TextItem(SectionType.ACHIEVEMENT);
-    private TextItem qualification = new TextItem(SectionType.QUALIFICATIONS);
-    private DateTextItems experience = new DateTextItems(SectionType.EXPERIENCE);
-    private DateTextItems education = new DateTextItems(SectionType.EDUCATION);
+    private Section personal = new TextField(SectionType.PERSONAL);
+    private Section objective = new TextField(SectionType.OBJECTIVE);
+    private Section achievement = new TextItem(SectionType.ACHIEVEMENT);
+    private Section qualification = new TextItem(SectionType.QUALIFICATIONS);
+    private Section experience = new DateTextItems(SectionType.EXPERIENCE);
+    private Section education = new DateTextItems(SectionType.EDUCATION);
 
-    public void setContacts(Contacts id, Contacts value) {
-        contacts.put(id, value);
+    public void setSectionContent(Section section, String text, String namePlace, LocalDate start, LocalDate end, String position) {
+        if (section.equals(experience) || section.equals(education)) {
+            DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(text, namePlace, start, end, position);
+            section.setContent(obj);
+        }
+        section.setContent(text);
     }
 
-    public Map<Contacts, Contacts> getContacts() {
-        return contacts;
-    }
-
-    public TextField getPersonal() {
-        return personal;
-    }
-
-    public void setPersonal(String text) {
-        personal.setTextContent(text);
-    }
-
-    public TextField getObjective() {
-        return objective;
-    }
-
-    public void setObjective(String text) {
-        objective.setTextContent(text);
-    }
-
-
-    public TextItem getAchievement() {
-        return achievement;
-    }
-
-    public void setAchievement(String text) {
-        achievement.setList(text);
-    }
-
-    public TextItem getQualification() {
-        return qualification;
-    }
-
-    public void setQualification(String text) {
-        qualification.setList(text);
-    }
-
-    public DateTextItems getExperience() {
-        return experience;
-    }
-
-    public void setExperience(String namePlace, LocalDate start, LocalDate end, String position, String description) {
-        DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(namePlace, start, end, position, description);
-        experience.setList(obj);
-    }
-
-    public DateTextItems getEducation() {
-        return education;
-    }
-
-    public void setEducation(String namePlace, LocalDate start, LocalDate end, String position) {
-        DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(namePlace, start, end, position, null);
-        education.setList(obj);
+    public String getSection(Section section) {
+        return section.getContent();
     }
 
     public String getFullName() {
