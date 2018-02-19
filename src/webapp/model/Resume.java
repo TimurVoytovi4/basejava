@@ -34,7 +34,7 @@ public class Resume implements Comparable<Resume> {
         }
     }
 
-    public void setSectionMap(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
+    public void setSectionMapContent(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
         Section section = sectionMap.get(sectionType);
         if (sectionType.equals(SectionType.EDUCATION) || sectionType.equals(SectionType.EXPERIENCE)) {
             DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(content, namePlace, start, end, position);
@@ -45,7 +45,7 @@ public class Resume implements Comparable<Resume> {
         sectionMap.replace(sectionType, section);
     }
 
-    public String getSection(SectionType searchSection) {
+    public String getSectionContent(SectionType searchSection) {
         Section section = sectionMap.get(searchSection);
         return section.getContent();
     }
