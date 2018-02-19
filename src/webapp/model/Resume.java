@@ -17,18 +17,16 @@ public class Resume implements Comparable<Resume> {
 
     private Map<ContactType, String> contacts = new HashMap<>();
     private Map<SectionType, Section> sectionMap = new HashMap<>();
-    private Section[] sections = new Section[6];
 
-    void create() {
+    void initialize() {
+        Section[] sections = new Section[6];
         sections[0] = new TextField();
         sections[1] = new TextField();
         sections[2] = new TextItem();
         sections[3] = new TextItem();
         sections[4] = new DateTextItems();
         sections[5] = new DateTextItems();
-    }
 
-    void addedToMap() {
         for (SectionType type : SectionType.values()) {
             int i = -1;
             i++;
@@ -38,7 +36,7 @@ public class Resume implements Comparable<Resume> {
 
     public void setSectionMap(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
         Section section = sectionMap.get(sectionType);
-        if (section.equals(sections[4]) || section.equals(sections[5])) {
+        if (sectionType.equals(SectionType.EDUCATION) || sectionType.equals(SectionType.EXPERIENCE)) {
             DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(content, namePlace, start, end, position);
             section.setContent(obj);
         } else {
