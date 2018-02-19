@@ -8,10 +8,6 @@ public class DateTextItems extends Section {
 
     private List<PlaceOfStay> list = new LinkedList<>();
 
-    DateTextItems(SectionType title) {
-        super(title);
-    }
-
     public void setContent(Object content) {
         list.add((PlaceOfStay) content);
     }

@@ -7,10 +7,6 @@ public class TextItem extends Section {
 
     private List<String> list = new ArrayList<>();
 
-    TextItem(SectionType title) {
-        super(title);
-    }
-
 
     public void setContent(Object text){
         list.add((String) text);
