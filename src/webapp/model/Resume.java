@@ -16,24 +16,39 @@ public class Resume implements Comparable<Resume> {
     private final String fullName;
 
     private Map<ContactType, String> contacts = new HashMap<>();
-    private Map<SectionType,Section> sectionMap = new HashMap<>();
+    private Map<SectionType, Section> sectionMap = new HashMap<>();
+    private Section[] sections = new Section[6];
 
-    private Section personal = new TextField(SectionType.PERSONAL);
-    private Section objective = new TextField(SectionType.OBJECTIVE);
-    private Section achievement = new TextItem(SectionType.ACHIEVEMENT);
-    private Section qualification = new TextItem(SectionType.QUALIFICATIONS);
-    private Section experience = new DateTextItems(SectionType.EXPERIENCE);
-    private Section education = new DateTextItems(SectionType.EDUCATION);
-
-    public void setSectionContent(Section section, String text, String namePlace, LocalDate start, LocalDate end, String position) {
-        if (section.equals(experience) || section.equals(education)) {
-            DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(text, namePlace, start, end, position);
-            section.setContent(obj);
-        }
-        section.setContent(text);
+    void create() {
+        sections[0] = new TextField();
+        sections[1] = new TextField();
+        sections[2] = new TextItem();
+        sections[3] = new TextItem();
+        sections[4] = new DateTextItems();
+        sections[5] = new DateTextItems();
     }
 
-    public String getSection(Section section) {
+    void addedToMap() {
+        for (SectionType type : SectionType.values()) {
+            int i = -1;
+            i++;
+            sectionMap.put(type, sections[i]);
+        }
+    }
+
+    public void setSectionMap(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
+        Section section = sectionMap.get(sectionType);
+        if (section.equals(sections[4]) || section.equals(sections[5])) {
+            DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(content, namePlace, start, end, position);
+            section.setContent(obj);
+        } else {
+            section.setContent(content);
+        }
+        sectionMap.replace(sectionType, section);
+    }
+
+    public String getSection(SectionType searchSection) {
+        Section section = sectionMap.get(searchSection);
         return section.getContent();
     }
 
