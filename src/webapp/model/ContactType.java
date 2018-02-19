@@ -1,11 +1,15 @@
 package webapp.model;
 
-public enum Contacts {
-    ID("Тип");
+public enum ContactType {
+    PHONE(""),
+    EMAIL(""),
+    GITHUB(""),
+    SKYPE("");
+
 
     private String title;
 
-    Contacts(String title) {
+    ContactType(String title) {
         this.title = title;
     }
 

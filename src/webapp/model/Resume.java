@@ -15,7 +15,8 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
-    private Map<Type, String> contacts = new HashMap<>();
+    private Map<ContactType, String> contacts = new HashMap<>();
+    private Map<SectionType,Section> sectionMap = new HashMap<>();
 
     private Section personal = new TextField(SectionType.PERSONAL);
     private Section objective = new TextField(SectionType.OBJECTIVE);
