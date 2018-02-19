@@ -18,7 +18,7 @@ public class Resume implements Comparable<Resume> {
     private Map<ContactType, String> contacts = new HashMap<>();
     private Map<SectionType, Section> sectionMap = new HashMap<>();
 
-    void initialize() {
+    void initializeSections() {
         Section[] sections = new Section[6];
         sections[0] = new TextField();
         sections[1] = new TextField();
@@ -45,9 +45,21 @@ public class Resume implements Comparable<Resume> {
         sectionMap.replace(sectionType, section);
     }
 
+    public void setContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
     public String getSectionContent(SectionType searchSection) {
         Section section = sectionMap.get(searchSection);
         return section.getContent();
+    }
+
+    public Map<SectionType, Section> getSectionMap() {
+        return sectionMap;
+    }
+
+    public Map<ContactType, String> getContacts() {
+        return contacts;
     }
 
     public String getFullName() {
