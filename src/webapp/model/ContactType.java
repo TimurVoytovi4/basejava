@@ -1,12 +1,16 @@
 package webapp.model;
 
 public enum ContactType {
-    PHONE("Телефон"),
-    EMAIL("Почта"),
-    GITHUB("Аккаунт"),
-    SKYPE("Аккаунт");
+    PHONE("Тел."),
+    MOBILE("Мобильный"),
+    HOME_PHONE("Домашний тел."),
+    SKYPE("Skype"),
+    MAIL("Почта"),
+    GITHUB("Профиль GitHub"),
+    STACKOVERFLOW("Профиль Stackoverflow"),
+    HOME_PAGE("Домашняя страница");
 
-    private String title;
+    private final String title;
 
     ContactType(String title) {
         this.title = title;
