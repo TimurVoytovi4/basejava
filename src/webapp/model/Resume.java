@@ -18,47 +18,11 @@ public class Resume implements Comparable<Resume> {
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
     private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class) ;
 
-    void initializeSections() {
-        Section[] sections = new Section[6];
-        sections[0] = new TextField();
-        sections[1] = new TextField();
-        sections[2] = new TextItem();
-        sections[3] = new TextItem();
-        sections[4] = new DateTextItems();
-        sections[5] = new DateTextItems();
-
-        for (SectionType type : SectionType.values()) {
-            int i = -1;
-            i++;
-            this.sections.put(type, sections[i]);
-        }
+    public Section getSection(SectionType type) {
+        return sections.get(type);
     }
 
-    public void setSectionMapContent(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
-        Section section = sections.get(sectionType);
-        if (sectionType.equals(SectionType.EDUCATION) || sectionType.equals(SectionType.EXPERIENCE)) {
-            DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(content, namePlace, start, end, position);
-            section.setContent(obj);
-        } else {
-            section.setContent(content);
-        }
-        sections.replace(sectionType, section);
-    }
-
-    public void setContact(ContactType type, String value) {
-        contacts.put(type, value);
-    }
-
-    public String getSectionContent(SectionType searchSection) {
-        Section section = sections.get(searchSection);
-        return section.getContent();
-    }
-
-    public Map<SectionType, Section> getSections() {
-        return sections;
-    }
-
-    public String getContacts(ContactType type) {
+    public String getContact(ContactType type) {
         return contacts.get(type);
     }
 
