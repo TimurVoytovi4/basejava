@@ -1,7 +1,7 @@
 package webapp.model;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,8 +15,8 @@ public class Resume implements Comparable<Resume> {
     private final String uuid;
     private final String fullName;
 
-    private Map<ContactType, String> contacts = new HashMap<>();
-    private Map<SectionType, Section> sectionMap = new HashMap<>();
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class) ;
 
     void initializeSections() {
         Section[] sections = new Section[6];
@@ -30,19 +30,19 @@ public class Resume implements Comparable<Resume> {
         for (SectionType type : SectionType.values()) {
             int i = -1;
             i++;
-            sectionMap.put(type, sections[i]);
+            this.sections.put(type, sections[i]);
         }
     }
 
     public void setSectionMapContent(SectionType sectionType, String content, String namePlace, LocalDate start, LocalDate end, String position) {
-        Section section = sectionMap.get(sectionType);
+        Section section = sections.get(sectionType);
         if (sectionType.equals(SectionType.EDUCATION) || sectionType.equals(SectionType.EXPERIENCE)) {
             DateTextItems.PlaceOfStay obj = new DateTextItems.PlaceOfStay(content, namePlace, start, end, position);
             section.setContent(obj);
         } else {
             section.setContent(content);
         }
-        sectionMap.replace(sectionType, section);
+        sections.replace(sectionType, section);
     }
 
     public void setContact(ContactType type, String value) {
@@ -50,16 +50,16 @@ public class Resume implements Comparable<Resume> {
     }
 
     public String getSectionContent(SectionType searchSection) {
-        Section section = sectionMap.get(searchSection);
+        Section section = sections.get(searchSection);
         return section.getContent();
     }
 
-    public Map<SectionType, Section> getSectionMap() {
-        return sectionMap;
+    public Map<SectionType, Section> getSections() {
+        return sections;
     }
 
-    public Map<ContactType, String> getContacts() {
-        return contacts;
+    public String getContacts(ContactType type) {
+        return contacts.get(type);
     }
 
     public String getFullName() {
