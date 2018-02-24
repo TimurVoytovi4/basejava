@@ -1,17 +1,13 @@
 package webapp.model;
 
-import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * com.urise.webapp.webapp.model.webapp.model.Resume class
- */
+
 public class Resume implements Comparable<Resume> {
 
-    // Unique identifier
     private final String uuid;
     private final String fullName;
 
