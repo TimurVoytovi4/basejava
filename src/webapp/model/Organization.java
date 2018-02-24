@@ -1,24 +1,16 @@
 package webapp.model;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class Organization {
     private final Link homePage;
-    private final LocalDate start;
-    private final LocalDate end;
-    private final String title;
-    private final String description;
+    private final List<Period> periods;
 
-    public Organization(String name, String url, LocalDate start, LocalDate end, String title, String description) {
-        this.homePage = new Link(name, url);
-        Objects.requireNonNull(start, "start must not be null");
-        Objects.requireNonNull(end, "end must not be null");
-        Objects.requireNonNull(title, "title must not be null");
-        this.start = start;
-        this.end = end;
-        this.title = title;
-        this.description = description;
+    public Organization(Link homePage, List<Period> periods) {
+        this.homePage = homePage;
+        this.periods = periods;
     }
 
     @Override
@@ -28,20 +20,14 @@ public class Organization {
 
         Organization that = (Organization) o;
 
-        if (!homePage.equals(that.homePage)) return false;
-        if (!start.equals(that.start)) return false;
-        if (!end.equals(that.end)) return false;
-        if (!title.equals(that.title)) return false;
-        return description != null ? description.equals(that.description) : that.description == null;
+        if (homePage != null ? !homePage.equals(that.homePage) : that.homePage != null) return false;
+        return periods != null ? periods.equals(that.periods) : that.periods == null;
     }
 
     @Override
     public int hashCode() {
-        int result = homePage.hashCode();
-        result = 31 * result + start.hashCode();
-        result = 31 * result + end.hashCode();
-        result = 31 * result + title.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        int result = homePage != null ? homePage.hashCode() : 0;
+        result = 31 * result + (periods != null ? periods.hashCode() : 0);
         return result;
     }
 
@@ -49,10 +35,7 @@ public class Organization {
     public String toString() {
         return "Organization{" +
                 "homePage=" + homePage +
-                ", start=" + start +
-                ", end=" + end +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                ", periods=" + periods +
                 '}';
     }
 }
