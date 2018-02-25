@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import webapp.exception.ExistStorageException;
 import webapp.exception.NotExistStorageException;
-import webapp.model.Resume;
+import webapp.model.*;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,16 +24,46 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4 = new Resume(UUID_4, "test4");
     Storage storage;
 
+    private Organization org = new Organization("TestOrganizations", "url",
+            new ArrayList<>(Arrays.asList(
+                    new PeriodOrganization(LocalDate.of(2017, 12, 15),
+                            LocalDate.now(), "TestTitle1", "Description1"),
+                    new PeriodOrganization(LocalDate.of(2016, 10, 11),
+                            LocalDate.of(2017, 12, 15), "TestTitle2", "Description2"))));
+
     AbstractStorageTest(Storage storage) {
         this.storage = storage;
+    }
+
+    private void addSection(Resume resume) {
+        resume.setSections(SectionType.PERSONAL, new TextSection("TestPersonal"));
+        resume.setSections(SectionType.OBJECTIVE, new TextSection("TestObjective"));
+        resume.setSections(SectionType.ACHIEVEMENT, new ListSection(new ArrayList<>(Arrays.asList("TestAchievement1", "TestAchievement2"))));
+        resume.setSections(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList("TestQualification1", "TestQualification2"))));
+        resume.setSections(SectionType.EDUCATION, new OrganizationSection(new ArrayList<>(Arrays.asList(org, org))));
+        resume.setSections(SectionType.EXPERIENCE, new OrganizationSection(new ArrayList<>(Arrays.asList(org, org))));
+    }
+
+    private void addContacts(Resume resume) {
+        resume.setContacts(ContactType.PHONE, "322223");
+        resume.setContacts(ContactType.MOBILE, "9846432");
+        resume.setContacts(ContactType.MAIL, "ert@fr.ru");
+        resume.setContacts(ContactType.HOME_PHONE, "498795");
+        resume.setContacts(ContactType.SKYPE, "skype");
     }
 
     @Before
     public void setUp() {
         storage.clear();
         storage.save(RESUME_1);
+        addSection(RESUME_1);
+        addContacts(RESUME_1);
         storage.save(RESUME_2);
+        addSection(RESUME_2);
+        addContacts(RESUME_2);
         storage.save(RESUME_3);
+        addSection(RESUME_3);
+        addContacts(RESUME_3);
     }
 
     @Test
