@@ -3,13 +3,13 @@ package webapp.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Period {
+public class PeriodOrganization {
     private final LocalDate start;
     private final LocalDate end;
     private final String title;
     private final String description;
 
-    public Period(LocalDate start, LocalDate end, String title, String description) {
+    public PeriodOrganization(LocalDate start, LocalDate end, String title, String description) {
         Objects.requireNonNull(start, "start must not be null");
         Objects.requireNonNull(end, "end must not be null");
         Objects.requireNonNull(title, "title must not be null");
@@ -24,12 +24,12 @@ public class Period {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Period period = (Period) o;
+        PeriodOrganization periodOrganization = (PeriodOrganization) o;
 
-        if (!start.equals(period.start)) return false;
-        if (!end.equals(period.end)) return false;
-        if (!title.equals(period.title)) return false;
-        return description != null ? description.equals(period.description) : period.description == null;
+        if (!start.equals(periodOrganization.start)) return false;
+        if (!end.equals(periodOrganization.end)) return false;
+        if (!title.equals(periodOrganization.title)) return false;
+        return description != null ? description.equals(periodOrganization.description) : periodOrganization.description == null;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Period {
 
     @Override
     public String toString() {
-        return "Period{" +
+        return "PeriodOrganization{" +
                 "start=" + start +
                 ", end=" + end +
                 ", title='" + title + '\'' +

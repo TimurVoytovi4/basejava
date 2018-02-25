@@ -1,16 +1,14 @@
 package webapp.model;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 public class Organization {
     private final Link homePage;
-    private final List<Period> periods;
+    private final List<PeriodOrganization> periodOrganizations;
 
-    public Organization(Link homePage, List<Period> periods) {
-        this.homePage = homePage;
-        this.periods = periods;
+    public Organization(String name, String url, List<PeriodOrganization> periodOrganizations) {
+        this.homePage = new Link(name, url);
+        this.periodOrganizations = periodOrganizations;
     }
 
     @Override
@@ -21,13 +19,13 @@ public class Organization {
         Organization that = (Organization) o;
 
         if (homePage != null ? !homePage.equals(that.homePage) : that.homePage != null) return false;
-        return periods != null ? periods.equals(that.periods) : that.periods == null;
+        return periodOrganizations != null ? periodOrganizations.equals(that.periodOrganizations) : that.periodOrganizations == null;
     }
 
     @Override
     public int hashCode() {
         int result = homePage != null ? homePage.hashCode() : 0;
-        result = 31 * result + (periods != null ? periods.hashCode() : 0);
+        result = 31 * result + (periodOrganizations != null ? periodOrganizations.hashCode() : 0);
         return result;
     }
 
@@ -35,7 +33,7 @@ public class Organization {
     public String toString() {
         return "Organization{" +
                 "homePage=" + homePage +
-                ", periods=" + periods +
+                ", periodOrganizations=" + periodOrganizations +
                 '}';
     }
 }
