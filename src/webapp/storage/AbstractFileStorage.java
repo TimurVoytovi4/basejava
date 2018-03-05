@@ -5,6 +5,7 @@ import webapp.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,8 +24,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doDelete(File searchKey) {
-
+    protected void doDelete(File file) {
+        file.delete();
     }
 
     @Override
@@ -39,14 +40,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     abstract void doWrite(Resume r, File file) throws IOException;
 
+    abstract Resume doRead(File file);
+
     @Override
     protected boolean isExist(File file) {
         return file.exists();
     }
 
     @Override
-    protected Resume doGet(File searchKey) {
-        return null;
+    protected Resume doGet(File file) {
+        return doRead(file);
     }
 
     @Override
@@ -55,22 +58,31 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doUpdate(Resume r, File searchKey) {
-
+    protected void doUpdate(Resume r, File file) {
+        try {
+            doWrite(r, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error ", file.getName(), e);
+        }
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        return null;
+        List<Resume> resumeList = new ArrayList<>();
+        for (File file : directory.listFiles())
+            resumeList.add(doRead(file));
+        return resumeList;
     }
 
     @Override
     public void clear() {
-
+        for (File file : directory.listFiles())
+            if (file.isFile()) file.delete();
     }
 
     @Override
     public int size() {
-        return 0;
+        File[] files = directory.listFiles();
+        return files.length;
     }
 }
