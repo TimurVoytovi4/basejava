@@ -25,14 +25,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        file.delete();
+        try {
+            file.delete();
+            if (file.exists())
+                throw new IOException();
+        } catch (IOException e) {
+            throw new StorageException("IO error ", file.getName(), e);
+        }
     }
 
     @Override
     protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, file);
+            doUpdate(r, file);
         } catch (IOException e) {
             throw new StorageException("IO error ", file.getName(), e);
         }
@@ -40,7 +46,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     abstract void doWrite(Resume r, File file) throws IOException;
 
-    abstract Resume doRead(File file);
+    abstract Resume doRead(File file) throws IOException;
 
     @Override
     protected boolean isExist(File file) {
@@ -49,7 +55,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume doGet(File file) {
-        return doRead(file);
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new StorageException("IO error ", file.getName(), e);
+        }
     }
 
     @Override
@@ -69,20 +79,25 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         List<Resume> resumeList = new ArrayList<>();
-        for (File file : directory.listFiles())
-            resumeList.add(doRead(file));
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            try {
+                resumeList.add(doRead(file));
+            } catch (IOException e) {
+                throw new StorageException("IO error ", file.getName(), e);
+            }
+        }
         return resumeList;
     }
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles())
+        for (File file : Objects.requireNonNull(directory.listFiles()))
             if (file.isFile()) file.delete();
     }
 
     @Override
     public int size() {
         File[] files = directory.listFiles();
-        return files.length;
+        return files != null ? files.length : 0;
     }
 }
