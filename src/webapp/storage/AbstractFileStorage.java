@@ -78,13 +78,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doCopyAll() {
         List<Resume> resumeList = new ArrayList<>();
-        for (File file : directory.listFiles()) {
-            try {
-                resumeList.add(doRead(file));
-            } catch (IOException e) {
-                throw new StorageException("IO error ", file.getName(), e);
+        File[] listFiles = directory.listFiles();
+        if (listFiles != null) {
+            for (File file : listFiles) {
+                try {
+                    resumeList.add(doRead(file));
+                } catch (IOException e) {
+                    throw new StorageException("IO error ", file.getName(), e);
+                }
             }
-        }
+        } else throw new StorageException("Storage is empty", null);
         return resumeList;
     }
 
@@ -94,12 +97,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         if (listFiles != null) {
             for (File file : listFiles)
                 if (file.isFile()) doDelete(file);
-        }
-        else try {
-            throw new IOException();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } else
+            throw new StorageException("Storage is empty", null);
     }
 
     @Override
