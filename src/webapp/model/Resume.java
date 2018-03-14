@@ -26,11 +26,11 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    public void setContacts(ContactType type, String contact) {
-        contacts.put(type, contact);
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
     }
 
-    public void setSections(SectionType type, Section section) {
+    public void addSection(SectionType type, Section section) {
         sections.put(type, section);
     }
 
