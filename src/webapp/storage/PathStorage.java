@@ -10,20 +10,20 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
 
     private Strategy strategy;
 
-    AbstractPathStorage(String dir, Strategy strategy) {
-        directory = Paths.get(dir);
+    PathStorage(String dir, Strategy strategy) {
+        this.directory = Paths.get(dir);
         Objects.requireNonNull(directory, "Directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
-        this.directory = directory;
         this.strategy = strategy;
     }
 
@@ -48,7 +48,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.exists(path);
+        return Files.isRegularFile(path);
     }
 
     @Override
@@ -76,7 +76,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        return (List<Resume>) getFileList();
+        return getFileList().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
