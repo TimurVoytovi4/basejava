@@ -25,6 +25,14 @@ public class Organization implements Serializable {
 
     public Organization() {
     }
+    
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
 
     public Organization(Link homePage, List<Position> positions) {
         this.homePage = homePage;
