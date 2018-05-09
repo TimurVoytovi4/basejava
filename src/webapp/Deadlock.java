@@ -1,17 +1,39 @@
 package webapp;
 
+
 public class Deadlock {
-    public static void main(String[] args) throws InterruptedException {
-//        Thread.currentThread().join();
-        final Thread mainThread = Thread.currentThread();
-        Thread newThread = new Thread(() -> {
+    public static void main(String[] args) {
+
+        final Object lock1 = new Object();
+        final Object lock2 = new Object();
+
+
+        new Thread(() -> {
             try {
-                mainThread.join();
+                synchronized (lock1){
+                    Thread.sleep(50);
+                    synchronized (lock2){
+                        System.out.println("First thread");
+                    }
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });newThread.start();
+        }).start();
 
-        mainThread.join();
+        new Thread(() -> {
+            try {
+                synchronized (lock2){
+                    Thread.sleep(50);
+                    synchronized (lock1){
+                        System.out.println("Second thread");
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
+
 }
