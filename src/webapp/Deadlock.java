@@ -10,9 +10,9 @@ public class Deadlock {
 
         new Thread(() -> {
             try {
-                synchronized (lock1){
+                synchronized (lock1) {
                     Thread.sleep(50);
-                    synchronized (lock2){
+                    synchronized (lock2) {
                         System.out.println("First thread");
                     }
                 }
@@ -23,9 +23,9 @@ public class Deadlock {
 
         new Thread(() -> {
             try {
-                synchronized (lock2){
+                synchronized (lock2) {
                     Thread.sleep(50);
-                    synchronized (lock1){
+                    synchronized (lock1) {
                         System.out.println("Second thread");
                     }
                 }
