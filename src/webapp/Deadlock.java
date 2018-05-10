@@ -7,7 +7,6 @@ public class Deadlock {
         final Object lock1 = new Object();
         final Object lock2 = new Object();
 
-
         startThread(lock1, lock2, "First thread");
 
         startThread(lock2, lock1, "Second thread");
@@ -28,5 +27,4 @@ public class Deadlock {
             }
         }).start();
     }
-
 }
