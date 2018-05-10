@@ -8,32 +8,25 @@ public class Deadlock {
         final Object lock2 = new Object();
 
 
+        startThread(lock1, lock2, "First thread");
+
+        startThread(lock2, lock1, "Second thread");
+
+    }
+
+    private static void startThread(Object lock1, Object lock2, String s) {
         new Thread(() -> {
             try {
                 synchronized (lock1) {
                     Thread.sleep(50);
                     synchronized (lock2) {
-                        System.out.println("First thread");
+                        System.out.println(s);
                     }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }).start();
-
-        new Thread(() -> {
-            try {
-                synchronized (lock2) {
-                    Thread.sleep(50);
-                    synchronized (lock1) {
-                        System.out.println("Second thread");
-                    }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
     }
 
 }
