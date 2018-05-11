@@ -17,12 +17,12 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
 
-            listWriter(dos, r.getContact().entrySet(), (Map.Entry<ContactType, String> contact) -> {
+            writerCollections(dos, r.getContact().entrySet(), (Map.Entry<ContactType, String> contact) -> {
                 dos.writeUTF(contact.getKey().name());
                 dos.writeUTF(contact.getValue());
             });
 
-            listWriter(dos, r.getSection().entrySet(), (Map.Entry<SectionType, Section> elem) -> {
+            writerCollections(dos, r.getSection().entrySet(), (Map.Entry<SectionType, Section> elem) -> {
                 SectionType sectionType = elem.getKey();
                 Section section = elem.getValue();
                 dos.writeUTF(sectionType.name());
@@ -33,18 +33,16 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        listWriter(dos, ((ListSection) section).getItems(), dos::writeUTF);
+                        writerCollections(dos, ((ListSection) section).getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        listWriter(dos, ((OrganizationSection) section).getOrganizations(), obj -> {
+                        writerCollections(dos, ((OrganizationSection) section).getOrganizations(), obj -> {
                             dos.writeUTF(obj.getHomePage().getName());
                             dos.writeUTF(obj.getHomePage().getUrl());
-                            listWriter(dos, obj.getPositions(), pos -> {
-                                dos.writeInt(pos.getStartDate().getYear());
-                                dos.writeInt(pos.getStartDate().getMonth().getValue());
-                                dos.writeInt(pos.getEndDate().getYear());
-                                dos.writeInt(pos.getEndDate().getMonth().getValue());
+                            writerCollections(dos, obj.getPositions(), pos -> {
+                                writeLocalDate(dos, pos.getStartDate());
+                                writeLocalDate(dos, pos.getEndDate());
                                 dos.writeUTF(pos.getTitle());
                                 dos.writeUTF(pos.getDescription());
                             });
@@ -55,15 +53,19 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
+    private void writeLocalDate(DataOutputStream dos, LocalDate localDate) throws IOException {
+        dos.writeInt(localDate.getYear());
+        dos.writeInt(localDate.getMonth().getValue());
+    }
 
-    private <T> void listWriter(DataOutputStream dos, Collection<T> collection, Writer<T> writer) throws IOException {
+    private <T> void writerCollections(DataOutputStream dos, Collection<T> collection, ElementWriter<T> elementWriter) throws IOException {
         dos.writeInt(collection.size());
         for (T obj : collection) {
-            writer.write(obj);
+            elementWriter.write(obj);
         }
     }
 
-    private interface Writer<T> {
+    private interface ElementWriter<T> {
         void write(T obj) throws IOException;
 
     }
@@ -90,12 +92,12 @@ public class DataStreamSerializer implements StreamSerializer {
                 return new TextSection(dis.readUTF());
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                return new ListSection(listReader(dis, dis::readUTF));
+                return new ListSection(readList(dis, dis::readUTF));
             case EDUCATION:
             case EXPERIENCE:
-                return new OrganizationSection(listReader(dis, () -> new Organization(
+                return new OrganizationSection(readList(dis, () -> new Organization(
                         new Link(dis.readUTF(), dis.readUTF()),
-                        listReader(dis, () -> new Organization.Position(
+                        readList(dis, () -> new Organization.Position(
                                 LocalDate.of(dis.readInt(), dis.readInt(), 1),
                                 LocalDate.of(dis.readInt(), dis.readInt(), 1),
                                 dis.readUTF(),
@@ -106,27 +108,27 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private <T> void readItems(DataInputStream dis, Process<T> process) throws IOException {
+    private <T> void readItems(DataInputStream dis, ElementProcessor<T> elementProcessor) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            process.process();
+            elementProcessor.process();
         }
     }
 
-    private <T> List<T> listReader(DataInputStream dis, Reader<T> reader) throws IOException {
+    private <T> List<T> readList(DataInputStream dis, ElementReader<T> elementReader) throws IOException {
         int size = dis.readInt();
         List<T> list = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
-            list.add(reader.read());
+            list.add(elementReader.read());
         }
         return list;
     }
 
-    private interface Reader<T> {
+    private interface ElementReader<T> {
         T read() throws IOException;
     }
 
-    private interface Process<T> {
+    private interface ElementProcessor<T> {
         void process() throws IOException;
     }
 }
