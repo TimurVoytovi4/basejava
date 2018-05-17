@@ -1,6 +1,8 @@
 package webapp.storage;
 
+import webapp.exception.ExistStorageException;
 import webapp.exception.NotExistStorageException;
+import webapp.exception.StorageException;
 import webapp.model.Resume;
 import webapp.sql.QueryExecuter;
 import webapp.sql.SqlHelper;
@@ -27,7 +29,7 @@ public class SqlStorage implements Storage {
         sqlHelper.sqlExecute("UPDATE resume SET full_name = ? WHERE uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, r.getFullName());
             preparedStatement.setString(2, r.getUuid());
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
             return null;
         });
     }
@@ -37,7 +39,7 @@ public class SqlStorage implements Storage {
         sqlHelper.sqlExecute("INSERT INTO resume(uuid, full_name) VALUES (?,?)", preparedStatement -> {
             preparedStatement.setString(1, r.getUuid());
             preparedStatement.setString(2, r.getFullName());
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
             return null;
         });
     }
@@ -59,6 +61,10 @@ public class SqlStorage implements Storage {
     public void delete(String uuid) {
         sqlHelper.sqlExecute("DELETE FROM resume WHERE uuid = ?", (QueryExecuter<Resume>) exec -> {
             exec.setString(1, uuid);
+            exec.executeUpdate();
+            if (get(uuid) == null) {
+                throw new NotExistStorageException(uuid);
+            }
             return null;
         });
     }
@@ -69,7 +75,7 @@ public class SqlStorage implements Storage {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
+                list.add(new Resume(resultSet.getString("uuid").trim(), resultSet.getString("full_name")));
             }
             return list;
         });
@@ -79,9 +85,9 @@ public class SqlStorage implements Storage {
     public int size() {
         return sqlHelper.sqlExecute("SELECT COUNT(*) FROM resume", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()){
+            if (resultSet.next()) {
                 return resultSet.getInt(1);
-            }else return 0;
+            } else return 0;
         });
     }
 }
