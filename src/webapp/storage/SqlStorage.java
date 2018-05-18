@@ -29,6 +29,9 @@ public class SqlStorage implements Storage {
         sqlHelper.sqlExecute("UPDATE resume SET full_name = ? WHERE uuid = ?", preparedStatement -> {
             preparedStatement.setString(1, r.getFullName());
             preparedStatement.setString(2, r.getUuid());
+            if (preparedStatement.executeUpdate() == 0) {
+                throw new NotExistStorageException(r.getUuid());
+            }
             preparedStatement.executeUpdate();
             return null;
         });
@@ -62,7 +65,7 @@ public class SqlStorage implements Storage {
         sqlHelper.sqlExecute("DELETE FROM resume WHERE uuid = ?", (QueryExecuter<Resume>) exec -> {
             exec.setString(1, uuid);
             exec.executeUpdate();
-            if (get(uuid) == null) {
+            if (exec.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
