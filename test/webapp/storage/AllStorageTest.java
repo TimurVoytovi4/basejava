@@ -14,7 +14,7 @@ import webapp.storage.serializer.JsonStreamSerializer;
         ObjectFileStorageTest.class,
         ObjectPathStorageTest.class,
         XmlPathStorageTest.class,
-        JsonStreamSerializer.class
+        SqlStorageTest.class
 
 })
 public class AllStorageTest {

@@ -1,10 +1,7 @@
 package webapp.storage;
 
-import webapp.exception.ExistStorageException;
 import webapp.exception.NotExistStorageException;
-import webapp.exception.StorageException;
 import webapp.model.Resume;
-import webapp.sql.QueryExecuter;
 import webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -38,7 +35,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume r) {
-        sqlHelper.sqlExecute("INSERT INTO resume(uuid, full_name) VALUES (?,?)", preparedStatement -> {
+        sqlHelper.<Void>sqlExecute("INSERT INTO resume(uuid, full_name) VALUES (?,?)", preparedStatement -> {
             preparedStatement.setString(1, r.getUuid());
             preparedStatement.setString(2, r.getFullName());
             preparedStatement.executeUpdate();
@@ -61,10 +58,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        sqlHelper.sqlExecute("DELETE FROM resume WHERE uuid = ?", (QueryExecuter<Resume>) exec -> {
-            exec.setString(1, uuid);
-            exec.executeUpdate();
-            if (exec.executeUpdate() == 0) {
+        sqlHelper.sqlExecute("DELETE FROM resume WHERE uuid = ?", preparedStatement -> {
+            preparedStatement.setString(1, uuid);
+            if (preparedStatement.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
@@ -73,11 +69,11 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.sqlExecute("SELECT * FROM resume", preparedStatement -> {
+        return sqlHelper.sqlExecute("SELECT * FROM resume r ORDER BY full_name,uuid", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (resultSet.next()) {
-                list.add(new Resume(resultSet.getString("uuid").trim(), resultSet.getString("full_name")));
+                list.add(new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
             }
             return list;
         });
@@ -87,9 +83,7 @@ public class SqlStorage implements Storage {
     public int size() {
         return sqlHelper.sqlExecute("SELECT COUNT(*) FROM resume", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else return 0;
+            return resultSet.next() ? resultSet.getInt(1) : 0;
         });
     }
 }
