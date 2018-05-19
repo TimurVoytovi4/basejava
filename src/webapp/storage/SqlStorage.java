@@ -32,7 +32,6 @@ public class SqlStorage implements Storage {
             if (preparedStatement.executeUpdate() == 0) {
                 throw new NotExistStorageException(r.getUuid());
             }
-            preparedStatement.executeUpdate();
             return null;
         });
     }
