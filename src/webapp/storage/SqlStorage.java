@@ -68,9 +68,7 @@ public class SqlStorage implements Storage {
                     }
                     Resume r = new Resume(uuid, resultSet.getString("full_name"));
                     do {
-                        String value = resultSet.getString("value");
-                        ContactType type = ContactType.valueOf(resultSet.getString("type"));
-                        r.addContact(type, value);
+                        addResumeContact(r, resultSet);
                     } while (resultSet.next());
                     return r;
                 });
@@ -93,33 +91,14 @@ public class SqlStorage implements Storage {
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (resultSet.next()) {
-                Resume resume;
-                list.add(resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
-                addResumeContact(resume, resultSet);
+                Resume resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name"));
+                if (!list.contains(resume)){
+                    list.add(resume);
+                    addResumeContact(resume, resultSet);
+                }
             }
             return list;
         });
-//        List<Resume> list = new ArrayList<>();
-//        return sqlHelper.transactionalExecute(connection -> {
-//            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume ")) {
-//                ResultSet resultSet = ps.executeQuery();
-//                while (resultSet.next()) {
-//                    list.add(new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
-//                }
-//            }
-//            try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM contact")) {
-//                ResultSet resultSet = ps.executeQuery();
-//                for (Resume listItem:list) {
-//                    while (listItem.getUuid().equals(resultSet.getString("resume_uuid"))){
-//                        String value = resultSet.getString("value");
-//                        ContactType type = ContactType.valueOf(resultSet.getString("type"));
-//                        listItem.addContact(type, value);
-//                    }
-//                }
-//                ps.executeBatch();
-//            }
-//            return list;
-//        });
     }
 
     @Override
