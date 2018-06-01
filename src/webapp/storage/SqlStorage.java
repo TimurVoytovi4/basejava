@@ -1,14 +1,13 @@
 package webapp.storage;
 
+import com.google.gson.internal.LinkedTreeMap;
 import webapp.exception.NotExistStorageException;
 import webapp.model.ContactType;
 import webapp.model.Resume;
 import webapp.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
 
@@ -89,15 +88,15 @@ public class SqlStorage implements Storage {
     public List<Resume> getAllSorted() {
         return sqlHelper.sqlExecute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid ORDER BY full_name,uuid", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<Resume> list = new ArrayList<>();
+            Map<String, Resume> list = new LinkedTreeMap<>();
             while (resultSet.next()) {
                 Resume resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name"));
-                if (!list.contains(resume)){
-                    list.add(resume);
+                if (!list.containsKey(resume.getUuid())){
                     addResumeContact(resume, resultSet);
+                    list.put(resume.getUuid(),resume);
                 }
             }
-            return list;
+            return new ArrayList<>(list.values());
         });
     }
 
