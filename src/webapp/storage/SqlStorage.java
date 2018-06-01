@@ -1,6 +1,5 @@
 package webapp.storage;
 
-import com.google.gson.internal.LinkedTreeMap;
 import webapp.exception.NotExistStorageException;
 import webapp.model.ContactType;
 import webapp.model.Resume;
@@ -88,15 +87,15 @@ public class SqlStorage implements Storage {
     public List<Resume> getAllSorted() {
         return sqlHelper.sqlExecute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid ORDER BY full_name,uuid", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
-            Map<String, Resume> list = new LinkedTreeMap<>();
+            Set<Resume> list = new TreeSet<>();
             while (resultSet.next()) {
                 Resume resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name"));
-                if (!list.containsKey(resume.getUuid())){
+                if (!list.contains(resume)){
                     addResumeContact(resume, resultSet);
-                    list.put(resume.getUuid(),resume);
+                    list.add(resume);
                 }
             }
-            return new ArrayList<>(list.values());
+            return new ArrayList<>(list);
         });
     }
 

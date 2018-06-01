@@ -9,9 +9,7 @@ import webapp.model.*;
 
 import java.io.File;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -108,7 +106,12 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> list = storage.getAllSorted();
         assertEquals(3, list.size());
-        assertEquals(list, Arrays.asList(R1, R2, R3));
+        List<Resume> resumeList = new ArrayList<>();
+        resumeList.add(R1);
+        resumeList.add(R3);
+        resumeList.add(R2);
+        Collections.sort(resumeList);
+        assertEquals(resumeList, list);
 
     }
 
