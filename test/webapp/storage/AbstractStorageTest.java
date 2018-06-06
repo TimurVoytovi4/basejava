@@ -38,8 +38,8 @@ public abstract class AbstractStorageTest {
         R1.addContact(ContactType.PHONE, "11111");
         R2.addContact(ContactType.MOBILE, "98724");
         R2.addContact(ContactType.GITHUB, "sssr");
-        R3.addContact(ContactType.HOME_PAGE, "mail1.ru");
-        R3.addContact(ContactType.PHONE, "11189");
+//        R3.addContact(ContactType.HOME_PAGE, "mail1.ru");
+//        R3.addContact(ContactType.PHONE, "11189");
         R4.addContact(ContactType.MAIL, "ik@ya.ru");
         R4.addContact(ContactType.PHONE, "9871");
 //        R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));

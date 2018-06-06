@@ -88,7 +88,7 @@ public class SqlStorage implements Storage {
     public List<Resume> getAllSorted() {
         return sqlHelper.sqlExecute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid ORDER BY full_name,uuid", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
-            Map<String, Resume> list = new LinkedTreeMap<>();
+            Map<String, Resume> list = new LinkedHashMap<>();
             while (resultSet.next()) {
                 String uuid = resultSet.getString("uuid");
                 Resume resume = list.get(uuid);
@@ -111,7 +111,9 @@ public class SqlStorage implements Storage {
     }
 
     private void addResumeContact(Resume resume, ResultSet resultSet) throws SQLException {
-        resume.addContact(ContactType.valueOf(resultSet.getString("type")), resultSet.getString("value"));
+        String value = resultSet.getString("value");
+        if (value!=null)
+            resume.addContact(ContactType.valueOf(resultSet.getString("type")),value );
     }
 
     private void removeResumeContact(Resume r, Connection connection) throws SQLException {
