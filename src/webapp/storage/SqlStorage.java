@@ -99,14 +99,14 @@ public class SqlStorage implements Storage {
             try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM contact")) {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    Resume resume = get(resultSet.getString("resume_uuid"));
+                    Resume resume = list.get(resultSet.getString("resume_uuid"));
                     addResumeContact(resume, resultSet);
                 }
             }
             try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM section")) {
                 ResultSet resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
-                    Resume resume = get(resultSet.getString("resume_uuid"));
+                    Resume resume = list.get(resultSet.getString("resume_uuid"));
                     addResumeSection(resume, resultSet);
                 }
             }
@@ -148,19 +148,15 @@ public class SqlStorage implements Storage {
     }
 
     private void removeResumeContact(Resume r, Connection connection) throws SQLException {
-        String nameDb = "contact";
-        removeElement(r, connection, nameDb);
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
+            ps.setString(1, r.getUuid());
+            ps.execute();
+        }
     }
 
     private void removeResumeSection(Resume r, Connection connection) throws SQLException {
-        String nameDb = "section";
-        removeElement(r, connection, nameDb);
-    }
-
-    private void removeElement(Resume r, Connection connection, String nameDb) throws SQLException {
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM ? WHERE resume_uuid = ?")) {
-            ps.setString(1, nameDb);
-            ps.setString(2, r.getUuid());
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM section WHERE resume_uuid = ?")) {
+            ps.setString(1, r.getUuid());
             ps.execute();
         }
     }
