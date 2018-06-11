@@ -1,9 +1,7 @@
 package webapp.storage;
 
-import com.google.gson.internal.LinkedTreeMap;
 import webapp.exception.NotExistStorageException;
-import webapp.model.ContactType;
-import webapp.model.Resume;
+import webapp.model.*;
 import webapp.sql.SqlHelper;
 
 import java.sql.*;
@@ -33,6 +31,8 @@ public class SqlStorage implements Storage {
                 }
                 removeResumeContact(r, connection);
                 setResumeContact(r, connection);
+                removeResumeSection(r, connection);
+                setResumeSection(r, connection);
                 return null;
             }
         });
@@ -47,6 +47,7 @@ public class SqlStorage implements Storage {
                 ps.execute();
             }
             setResumeContact(r, connection);
+            setResumeSection(r, connection);
             return null;
         });
     }
@@ -102,6 +103,13 @@ public class SqlStorage implements Storage {
                     addResumeContact(resume, resultSet);
                 }
             }
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM section")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Resume resume = get(resultSet.getString("resume_uuid"));
+                    addResumeSection(resume, resultSet);
+                }
+            }
             return new ArrayList<>(list.values());
         });
     }
@@ -120,9 +128,39 @@ public class SqlStorage implements Storage {
             resume.addContact(ContactType.valueOf(resultSet.getString("type")), value);
     }
 
+    private void addResumeSection(Resume resume, ResultSet resultSet) throws SQLException {
+        String content = resultSet.getString("content");
+        SectionType type = SectionType.valueOf(resultSet.getString("type"));
+        Section section = null;
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
+                section = new TextSection(content);
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                section = new ListSection(Arrays.asList(content.split("\n")));
+                break;
+        }
+        if (content != null) {
+            resume.addSection(type, section);
+        }
+    }
+
     private void removeResumeContact(Resume r, Connection connection) throws SQLException {
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM contact WHERE resume_uuid = ?")) {
-            ps.setString(1, r.getUuid());
+        String nameDb = "contact";
+        removeElement(r, connection, nameDb);
+    }
+
+    private void removeResumeSection(Resume r, Connection connection) throws SQLException {
+        String nameDb = "section";
+        removeElement(r, connection, nameDb);
+    }
+
+    private void removeElement(Resume r, Connection connection, String nameDb) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM ? WHERE resume_uuid = ?")) {
+            ps.setString(1, nameDb);
+            ps.setString(2, r.getUuid());
             ps.execute();
         }
     }
@@ -133,6 +171,29 @@ public class SqlStorage implements Storage {
                 ps.setString(1, r.getUuid());
                 ps.setString(2, entry.getKey().name());
                 ps.setString(3, entry.getValue());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private void setResumeSection(Resume r, Connection connection) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement("INSERT INTO section(resume_uuid, type, content) VALUES (?,?,?)")) {
+            String section = null;
+            for (Map.Entry<SectionType, Section> entry : r.getSection().entrySet()) {
+                ps.setString(1, r.getUuid());
+                ps.setString(2, entry.getKey().name());
+                switch (entry.getKey()) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        section = entry.getValue().toString();
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        section = entry.getValue().toString();
+                        break;
+                }
+                ps.setString(3, section);
                 ps.addBatch();
             }
             ps.executeBatch();
