@@ -86,17 +86,21 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.sqlExecute("SELECT * FROM resume r LEFT JOIN contact c ON r.uuid = c.resume_uuid ORDER BY full_name,uuid", preparedStatement -> {
-            ResultSet resultSet = preparedStatement.executeQuery();
+        return sqlHelper.transactionalExecute(connection -> {
             Map<String, Resume> list = new LinkedHashMap<>();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("uuid");
-                Resume resume = list.get(uuid);
-                if (resume == null){
-                    resume = new Resume(resultSet.getString("uuid"), resultSet.getString("full_name"));
-                    list.put(uuid, resume);
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM resume ORDER BY full_name,uuid")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("uuid");
+                    list.put(uuid, new Resume(uuid, resultSet.getString("full_name")));
                 }
-                addResumeContact(resume, resultSet);
+            }
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM contact")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    Resume resume = get(resultSet.getString("resume_uuid"));
+                    addResumeContact(resume, resultSet);
+                }
             }
             return new ArrayList<>(list.values());
         });
@@ -112,8 +116,8 @@ public class SqlStorage implements Storage {
 
     private void addResumeContact(Resume resume, ResultSet resultSet) throws SQLException {
         String value = resultSet.getString("value");
-        if (value!=null)
-            resume.addContact(ContactType.valueOf(resultSet.getString("type")),value );
+        if (value != null)
+            resume.addContact(ContactType.valueOf(resultSet.getString("type")), value);
     }
 
     private void removeResumeContact(Resume r, Connection connection) throws SQLException {

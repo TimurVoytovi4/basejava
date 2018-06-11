@@ -19,3 +19,11 @@ create table contact
 create unique index contact_uuid_type_index
   on contact (resume_uuid, type);
 
+CREATE TABLE section
+(
+  id serial PRIMARY KEY,
+  type text NOT NULL,
+  content text NOT NULL,
+  resume_uuid char(36) NOT NULL,
+  CONSTRAINT section_resume_uuid_fk FOREIGN KEY (resume_uuid) REFERENCES public.resume (uuid) ON DELETE CASCADE
+);
