@@ -1,4 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <footer>
-    Help <a href="http://google.com/" target="_blank"> your self</a>
+    Проект <a href="http://javaops.ru/reg/basejava"> Разработка Web приложения База данных резюме</a>
 </footer>
