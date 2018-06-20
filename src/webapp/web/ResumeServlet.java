@@ -64,7 +64,7 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
                     case EXPERIENCE:
                         List<Organization> organizations = new ArrayList<>();
                         String[] urls = request.getParameterValues(type.name() + "url");
-                        for (int i = 0; i < value.length(); i++) {
+                        for (int i = 0; i < values.length; i++) {
                             String name = values[i];
                             if (!HtmlUtil.isEmpty(name)) {
                                 List<Organization.Position> positions = new ArrayList<>();
